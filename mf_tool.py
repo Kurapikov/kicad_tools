@@ -66,7 +66,7 @@ class ExcludeRefClass:
         return False
 
 unusedRef = None
-    
+
 class RefBuilder:
     ''' RefBuilder use to re-build the module referrence number
     Step 1:  use rb = RefBuilder() to create a RefBuilder object
@@ -112,7 +112,7 @@ class RefBuilder:
         return newRef
     def Show(self):
         print(self.refMap)
-        
+
 def testRefBuilder():
     rb = RefBuilder()
     rb.collects(['R1','R2','R14', 'R10', 'D1', 'D2', 'U3', 'U2', 'U1'])
@@ -205,11 +205,11 @@ def GetOtherBoard(brd):
     else:
         return brd
     return brd
-    
+
 class BoardItems:
     '''  Class to hold all interest board items
          Use Collect method to get all board items
-   
+
     '''
     def __init__(self):
         self.rb = RefBuilder()
@@ -273,7 +273,7 @@ class BoardItems:
         print('Move item in ', self.ShowRect(), 'off = (', off.x/1000000, ',' ,off.y/1000000,')')
         self.rect.Move(off)
         print('Result is ', self.ShowRect())
-        
+
     def Clone(self, brd = None):
         if not brd:
             brd = self.brd
@@ -326,7 +326,7 @@ def test2():
     #bi2 = bi2.Clone(brd)
     # Clone items in board 1
     bb1 = bi1.Clone()
-    # Change the module reference 
+    # Change the module reference
     bi2.UpdateRef(bi1.rb)
     # Clone items in board 2
     bb2 = bi2.Clone()
@@ -338,11 +338,11 @@ def test2():
     # Move them
     bi2.MoveToMM(0,0)
     bi2.Rotate(180)
-    
+
     bb1.Mirror()
     bb2.Rotate(180)
     bb2.Mirror()
-    
+
     bb1.MoveToMM(54, -59)
     bb2.MoveToMM(54, -59)
 
@@ -376,7 +376,7 @@ class BOMItem:
         kv = value
         #if kv.rfind('[') != -1:
         #    kv = kv[0:kv.rfind('[')]
-        
+
         self.netKey = kv + "&" + footprint
         try:
             if not isinstance(self.netKey, unicode):
@@ -401,7 +401,7 @@ class BOMItem:
                     self.value = comp['comment']
             else:
                 print("fail to find ", self.netKey, " in net list")
-        
+
     def Output(self, out = None):
         refs = ''
         for r in ref_sorted(self.refs):
@@ -483,7 +483,7 @@ class POSItem:
             print('Pad1 not found for mod')
             self.PadX = self.MidX
             self.PadY = self.MidY
-        self.rot = int(mod.GetOrientation()/10)
+        self.rot = mod.GetOrientation()/10
         self.ref = mod.GetReference()
         self.val = mod.GetValue()
         self.layer = layerName(mod.GetLayer())
@@ -557,7 +557,7 @@ def CollectItem(brd = None):
     bi = BoardItems()
     bi.Collect(brd)
     return bi
-    
+
 def CopyItemTo(boardItem, x, y):
     newBI = boardItem.Clone()
     newBI.MoveToMM(x, y)
@@ -585,7 +585,7 @@ class UnicodeWriter:
                 self.file.write(e)
             self.file.write(u'",')
         self.file.write(u'\n')
-    
+
 
 def OpenCSV(fileName):
     try:
@@ -610,14 +610,14 @@ def def_logger(*args):
         r = r + str(t) + " "
     print(r)
 
-    
+
 def GenMFDoc(SplitTopAndBottom = False, ExcludeRef = [], ExcludeValue = [], brd = None, needGenBOM = True, needGenPos = True, logger = def_logger):
     if not brd:
         brd = pcbnew.GetBoard()
     if not needGenBOM and not needGenPos:
         return
     bound = GetBoardBound(brd)
-    org_pt = pcbnew.wxPoint( bound.GetLeft(), bound.GetBottom())
+    org_pt = pcbnew.VECTOR2I( bound.GetLeft(), bound.GetBottom())
     logger("set board aux origin to left bottom point, at", org_pt)
     if hasattr(brd, 'SetAuxOrigin'):
         brd.SetAuxOrigin(org_pt)
@@ -628,22 +628,22 @@ def GenMFDoc(SplitTopAndBottom = False, ExcludeRef = [], ExcludeValue = [], brd 
     fName = os.path.split(fName)[1]
     bomName = fName.rsplit('.',1)[0]
     netList = loadnet.loadNet(brd)
-    
+
     excludeRefs = PreCompilePattenList(ExcludeRef)
     excludeValues = PreCompilePattenList(ExcludeValue)
 
     bomSMDTop = GenBOM(brd, pcbnew.F_Cu, 1, excludeRefs, excludeValues, netList)
     bomHoleTop = GenBOM(brd, pcbnew.F_Cu, 0, excludeRefs, excludeValues, netList)
-    
+
     bomSMDBot = GenBOM(brd, pcbnew.B_Cu, 1, excludeRefs, excludeValues, netList)
     bomHoleBot = GenBOM(brd, pcbnew.B_Cu, 0, excludeRefs, excludeValues, netList)
-    
+
     posSMDTop = GenPos(brd, pcbnew.F_Cu, 1, excludeRefs, excludeValues)
     posHoleTop = GenPos(brd, pcbnew.F_Cu, 0, excludeRefs, excludeValues)
-    
+
     posSMDBot = GenPos(brd, pcbnew.B_Cu, 1, excludeRefs, excludeValues)
     posHoleBot = GenPos(brd, pcbnew.B_Cu, 0, excludeRefs, excludeValues)
-    
+
     if SplitTopAndBottom:
         fName = bomName
         bomName = path + '/' + fName + '_BOM_TOP.csv'
@@ -670,7 +670,7 @@ def GenMFDoc(SplitTopAndBottom = False, ExcludeRef = [], ExcludeValue = [], brd 
                 csv.writerow(['Through Hole Items '])
                 for v in posHoleTop:
                    v.Output(csv)
-           
+
         bomName = path + '/' + fName + '_BOM_BOT.csv'
         posName = path + '/' + fName + '_POS_BOT.csv'
         if needGenBOM:
@@ -685,17 +685,17 @@ def GenMFDoc(SplitTopAndBottom = False, ExcludeRef = [], ExcludeValue = [], brd 
                 for v in bomHoleBot:
                    v.Output(csv)
         if needGenPos:
-            # Generate POS for Bottom layer   
+            # Generate POS for Bottom layer
             logger('Genertate POS file ', posName)
             csv = OpenCSV(posName)
-            OutputPosHeader(csv)        
+            OutputPosHeader(csv)
             for v in posSMDBot:
                v.Output(csv)
             if len(posHoleBot)>0:
                 csv.writerow(['Through Hole Items '])
                 for v in posHoleBot:
                    v.Output(csv)
-        
+
     else:
         posName = path + '/' + bomName + '_POS.csv'
         bomName = path + '/' + bomName + '_BOM.csv'
@@ -706,37 +706,37 @@ def GenMFDoc(SplitTopAndBottom = False, ExcludeRef = [], ExcludeValue = [], brd 
             OutputBOMHeader(csv)
             for v in bomSMDTop:
                v.Output(csv)
-               
+
             for  v in bomSMDBot:
                v.Output(csv)
             if len(bomHoleTop)+len(bomHoleBot)>0:
                 csv.writerow(['Through Hole Items '])
                 for v in bomHoleTop:
                    v.Output(csv)
-                   
+
                 for v in bomHoleBot:
                    v.Output(csv)
-        
+
         if needGenPos:
             # Generate POS for both layer
             logger('Genertate POS file ', posName)
-        
+
             csv = OpenCSV(posName)
             OutputPosHeader(csv)
             for v in posSMDTop:
                v.Output(csv)
-               
+
             for v in posSMDBot:
                v.Output(csv)
             if len(posHoleTop)+len(posHoleBot)>0:
                 csv.writerow(['Through Hole Items '])
                 for v in posHoleTop:
                    v.Output(csv)
-                   
+
                 for v in posHoleBot:
                    v.Output(csv)
     return bomName, posName
-    
+
 def version():
     print("1.2")
 
@@ -746,8 +746,8 @@ def GenSMTFiles():
     GenMFDoc()
     gd.GenGerberDrill(board = None, split_G85 = 0.2, plotDir = "gerber/")
 
-    
-    
+
+
 def TestDialog():
     tt = MFDialog()
     tt.Show()
@@ -806,7 +806,7 @@ class MFDialog(mf_dialog_base.MFDialogBase):
                 except Exception as e1:
                     self.area_text.AppendText("\nError:\nfail to log content ")
                     self.area_text.AppendText(traceback.format_exc())
-        self.area_text.AppendText("\n")    
+        self.area_text.AppendText("\n")
 
 class gen_mf_doc( pcbnew.ActionPlugin ):
     """
@@ -836,10 +836,5 @@ class gen_mf_doc( pcbnew.ActionPlugin ):
     def Run( self ):
         tt = MFDialog()
         tt.Show()
-        
+
 gen_mf_doc().register()
-    
-    
-    
-    
-    

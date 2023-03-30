@@ -54,14 +54,14 @@ def GenGerberDrill(board = None, split_G85 = 0.2, plotDir = "plot/", plotReferen
 	popt.SetMirror(False)
 	popt.SetUseGerberAttributes(True)
 	popt.SetUseGerberProtelExtensions(False)
-	popt.SetExcludeEdgeLayer(True)
+	# popt.SetExcludeEdgeLayer(True)
 	popt.SetScale(1)
 	popt.SetUseAuxOrigin(True)
 	popt.SetPlotReference(plotReference)
-	
+
 	if hasattr(popt, "SetDrillMarksType"):
 		popt.SetDrillMarksType(0)
-		
+
 
 	# This by gerbers only (also the name is truly horrid!)
 	popt.SetSubtractMaskFromSilk(False)
@@ -137,7 +137,7 @@ def GenGerberDrill(board = None, split_G85 = 0.2, plotDir = "plot/", plotReferen
 	#rptfn = pctl.GetPlotDirName() + 'drill_report.rpt'
 	#print('report: %s' % rptfn)
 	#drlwriter.GenDrillReportFile( rptfn );
-	
+
 	if split_G85:
 		logger("Split the slot into holes")
 		SplitSlotInDrill(pctl.GetPlotDirName(), False, split_G85)
@@ -314,5 +314,3 @@ def SplitSlotInDrill(drillPath, newfilename = True,step = 0.2):
 				fo = open(outfn, "w+")
 				fo.writelines(outline)
 				fo.close()
-
-	

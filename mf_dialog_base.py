@@ -37,30 +37,30 @@ class MFDialogBase ( wx.Dialog ):
 
 		self.chkBOM = wx.CheckBox( self, wx.ID_ANY, u"BOM List", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.chkBOM.SetValue(True)
-		self.chkBOM.SetToolTipString( u"Generate BOM" )
+		self.chkBOM.SetToolTip( u"Generate BOM" )
 
 		fgSizer4.Add( self.chkBOM, 0, wx.ALL, 5 )
 
 		self.chkPos = wx.CheckBox( self, wx.ID_ANY, u"Position File", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.chkPos.SetValue(True)
-		self.chkPos.SetToolTipString( u"Generate Position file" )
+		self.chkPos.SetToolTip( u"Generate Position file" )
 
 		fgSizer4.Add( self.chkPos, 0, wx.ALL, 5 )
 
 		self.chkGerber = wx.CheckBox( self, wx.ID_ANY, u"Gerber File", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.chkGerber.SetValue(True)
-		self.chkGerber.SetToolTipString( u"Generate Gerber file" )
+		self.chkGerber.SetToolTip( u"Generate Gerber file" )
 
 		fgSizer4.Add( self.chkGerber, 0, wx.ALL, 5 )
 
 		self.chkPlotRef = wx.CheckBox( self, wx.ID_ANY, u"Plot Reference", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.chkPlotRef.SetValue(True)
-		self.chkPlotRef.SetToolTipString( u"Plot reference" )
+		self.chkPlotRef.SetToolTip( u"Plot reference" )
 
 		fgSizer4.Add( self.chkPlotRef, 0, wx.ALL, 5 )
 
 		self.chkSplitSlot = wx.CheckBox( self, wx.ID_ANY, u"Split Slot", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.chkSplitSlot.SetToolTipString( u"Split slot hole into hole series" )
+		self.chkSplitSlot.SetToolTip( u"Split slot hole into hole series" )
 
 		fgSizer4.Add( self.chkSplitSlot, 0, wx.ALL, 5 )
 
@@ -88,7 +88,7 @@ class MFDialogBase ( wx.Dialog ):
 		fgSizer2.Add( self.m_staticText1, 0, wx.ALL, 5 )
 
 		self.exclude_ref_text = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.exclude_ref_text.SetToolTipString( u"Exclude reference, load from \"exclude.txt\"" )
+		self.exclude_ref_text.SetToolTip( u"Exclude reference, load from \"exclude.txt\"" )
 		self.exclude_ref_text.SetMaxSize( wx.Size( -1,20 ) )
 
 		fgSizer2.Add( self.exclude_ref_text, 0, wx.ALL|wx.EXPAND, 5 )
@@ -127,5 +127,3 @@ class MFDialogBase ( wx.Dialog ):
 
 	def ClearLog( self, event ):
 		event.Skip()
-
-

@@ -12,7 +12,7 @@ def loadNet(brd = None):
     if os.path.exists(name):
         return loadNetFile(name)
     if hasattr(brd, "GetFootprints"):
-        print("File not exist, try to get info from footprint", name)
+        print("File not exist, try to get info from footprint", name.encode('utf-8'))
         r = {}
         for fp in brd.GetFootprints():
             c = parseFootprint(fp)
@@ -38,7 +38,7 @@ def parseFootprint(fp):
 
 def toStr(v):
     return v
-    
+
 def parseComp(comp):
     r = {}
     if comp[0] != "comp":
@@ -68,7 +68,7 @@ def parseComp(comp):
                 if fkey == "description":
                     r['description'] = toStr(field[2])
     return r
-    
+
 def loadNetFile(fileName):
     try:
         nets = sexp.loadKicadNet(fileName)
@@ -85,6 +85,3 @@ def loadNetFile(fileName):
         print("Fail to load netlist:")
         traceback.print_exc()
         return None
-            
-            
-            
