@@ -483,7 +483,7 @@ class POSItem:
             print('Pad1 not found for mod')
             self.PadX = self.MidX
             self.PadY = self.MidY
-        self.rot = mod.GetOrientation()/10
+        self.rot = mod.GetOrientation().AsDegrees()
         self.ref = mod.GetReference()
         self.val = mod.GetValue()
         self.layer = layerName(mod.GetLayer())
